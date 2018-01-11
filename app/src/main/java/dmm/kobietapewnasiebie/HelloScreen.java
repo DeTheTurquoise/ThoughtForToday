@@ -32,7 +32,6 @@ public class HelloScreen extends AppCompatActivity {
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_hello_screen);
         prepareScreen();
         int dayName = getDayOfWeek(getCalendarForToday());
-        setBackground(dayName);
         if(!setDataWhichWasUsedToday()){
             Calendar calendar = getCalendarForToday();
             Cursor queryResult = getDataWhichWasNotUsed(Tags.getTag(dayName));
@@ -44,58 +43,32 @@ public class HelloScreen extends AppCompatActivity {
     private void prepareScreen(){
         KPSdataHelper helper = new KPSdataHelper(this);
         database = helper.getWritableDatabase();
-    //    HelloMessageDefaultData.insertDefaultData(database);
+     //   HelloMessageDefaultData.insertDefaultData(database);
 
         Typeface face=Typeface.createFromAsset(getAssets(), "Garineldo.ttf");
-        activityMainBinding.helloMessage.setTypeface(face);
+        activityMainBinding.helloMessageText.setTypeface(face);
         face = Typeface.createFromAsset(getAssets(), "Raleway-SemiBoldItalic.ttf");
         activityMainBinding.additionalText.setTypeface(face);
     }
 
     public void setTextToFields(String... textToDisplay) {
         clearTextFields();
-        activityMainBinding.helloMessage.setText(textToDisplay[0]);
-        activityMainBinding.messageFrame.setContentDescription(textToDisplay[0]);
+        activityMainBinding.helloMessageText.setText(textToDisplay[0]);
         if (textToDisplay.length>1) {
             activityMainBinding.additionalText.setText(textToDisplay[1]);
-            activityMainBinding.messageFrame.setContentDescription(textToDisplay[0] + " " + textToDisplay[1]);
         }
     }
 
     public String[] getTextFromFields(){
         String[] addedTexts = {};
-        addedTexts[0] = activityMainBinding.helloMessage.getText().toString();
+        addedTexts[0] = activityMainBinding.helloMessageText.getText().toString();
         addedTexts[1] = activityMainBinding.additionalText.getText().toString();
         return addedTexts;
     }
 
     private void clearTextFields(){
-        activityMainBinding.helloMessage.setText("");
-        activityMainBinding.helloMessage.setText("");
-    }
-
-    private Cursor getQueryResult(){
-        return database.query(
-                KPScontract.HelloMessages.TABLE_NAME,
-                columns,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
-    }
-
-    private Cursor getDataByTag(String tag){
-        return database.query(
-                KPScontract.HelloMessages.TABLE_NAME,
-                columns,
-                KPScontract.HelloMessages.COLUMN_TEXT_TYPE + " = '" + tag + "'",
-                null,
-                null,
-                null,
-                null
-        );
+        activityMainBinding.helloMessageText.setText("");
+        activityMainBinding.helloMessageText.setText("");
     }
 
     private Cursor getDataWhichWasNotUsed(String tag){
@@ -162,14 +135,4 @@ public class HelloScreen extends AppCompatActivity {
         Log.i("temp", "Day - " + day + ", date - " + calendar.getTime());
         return day;
     }
-
-
-
-    private void setBackground(int dayName){
-        int dayParameter = (dayName + 3)%4;
-        activityMainBinding.messageLayout.setBackgroundResource(getResources().getIdentifier("t" + dayParameter,"mipmap",getPackageName()));
-        activityMainBinding.messageFrame.setBackgroundResource(getResources().getIdentifier("r" + dayParameter,"mipmap",getPackageName()));
-    }
-
-
 }

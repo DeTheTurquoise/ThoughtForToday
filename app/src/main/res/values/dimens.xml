@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--line parameters-->
+    <dimen name="line_weight">5dp</dimen>
+    <dimen name="long_line_margin">20dp</dimen>
+    <dimen name="short_line_margin">40dp</dimen>
+
+</resources>
