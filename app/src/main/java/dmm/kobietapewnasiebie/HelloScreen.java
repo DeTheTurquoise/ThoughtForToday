@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import dmm.kobietapewnasiebie.database.DefaultData.HelloMessageDefaultData;
 import dmm.kobietapewnasiebie.database.KPScontract;
 import dmm.kobietapewnasiebie.database.KPSdataHelper;
 import dmm.kobietapewnasiebie.databinding.ActivityHelloScreenBinding;
@@ -40,10 +41,19 @@ public class HelloScreen extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        database.close();
+        super.onDestroy();
+    }
+
     private void prepareScreen(){
         KPSdataHelper helper = new KPSdataHelper(this);
         database = helper.getWritableDatabase();
-     //   HelloMessageDefaultData.insertDefaultData(database);
+        Cursor cursor = database.query(KPScontract.HelloMessages.TABLE_NAME,null,null,null,null,null,null);
+        if(cursor.getCount()==0){
+            HelloMessageDefaultData.insertDefaultData(database);
+        }
 
         Typeface face=Typeface.createFromAsset(getAssets(), "Garineldo.ttf");
         activityMainBinding.helloMessageText.setTypeface(face);
